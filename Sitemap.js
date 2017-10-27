@@ -1,1 +1,217 @@
-var postTitle=new Array();var postUrl=new Array();var postMp3=new Array();var postDate=new Array();var postLabels=new Array();var postBaru=new Array();var sortBy="titleasc";var tocLoaded=false;var numChars=250;var postFilter="";var numberfeed=0;function loadtoc(a){function b(){if("entry" in a.feed){var d=a.feed.entry.length;numberfeed=d;ii=0;for(var h=0;h<d;h++){var n=a.feed.entry[h];var e=n.title.$t;var m=n.published.$t.substring(0,10);var j;for(var g=0;g<n.link.length;g++){if(n.link[g].rel=="alternate"){j=n.link[g].href;break}}var o="";for(var g=0;g<n.link.length;g++){if(n.link[g].rel=="enclosure"){o=n.link[g].href;break}}var c="";if("category" in n){for(var g=0;g<n.category.length;g++){c=n.category[g].term;var f=c.lastIndexOf(";");if(f!=-1){c=c.substring(0,f)}postLabels[ii]=c;postTitle[ii]=e;postDate[ii]=m;postUrl[ii]=j;postMp3[ii]=o;if(h<10){postBaru[ii]=true}else{postBaru[ii]=false}ii=ii+1}}}}}b();sortBy="titleasc";sortPosts(sortBy);sortlabel();tocLoaded=true;displayToc2();document.write('</br><a href="http://khazeoblog.blogspot.co.id/" style="font-size: 10px; text-decoration:none; color: #000000;">Sitemap By Khazeo Blog</a>')}function filterPosts(a){scroll(0,0);postFilter=a;displayToc(postFilter)}function allPosts(){sortlabel();postFilter="";displayToc(postFilter)}function sortPosts(d){function c(e,g){var f=postTitle[e];postTitle[e]=postTitle[g];postTitle[g]=f;var f=postDate[e];postDate[e]=postDate[g];postDate[g]=f;var f=postUrl[e];postUrl[e]=postUrl[g];postUrl[g]=f;var f=postLabels[e];postLabels[e]=postLabels[g];postLabels[g]=f;var f=postMp3[e];postMp3[e]=postMp3[g];postMp3[g]=f;var f=postBaru[e];postBaru[e]=postBaru[g];postBaru[g]=f}for(var b=0;b<postTitle.length-1;b++){for(var a=b+1;a<postTitle.length;a++){if(d=="titleasc"){if(postTitle[b]>postTitle[a]){c(b,a)}}if(d=="titledesc"){if(postTitle[b]<postTitle[a]){c(b,a)}}if(d=="dateoldest"){if(postDate[b]>postDate[a]){c(b,a)}}if(d=="datenewest"){if(postDate[b]<postDate[a]){c(b,a)}}if(d=="orderlabel"){if(postLabels[b]>postLabels[a]){c(b,a)}}}}}function sortlabel(){sortBy="orderlabel";sortPosts(sortBy);var a=0;var b=0;while(b<postTitle.length){temp1=postLabels[b];firsti=a;do{a=a+1}while(postLabels[a]==temp1);b=a;sortPosts2(firsti,a);if(b>postTitle.length){break}}}function sortPosts2(d,c){function e(f,h){var g=postTitle[f];postTitle[f]=postTitle[h];postTitle[h]=g;var g=postDate[f];postDate[f]=postDate[h];postDate[h]=g;var g=postUrl[f];postUrl[f]=postUrl[h];postUrl[h]=g;var g=postLabels[f];postLabels[f]=postLabels[h];postLabels[h]=g;var g=postMp3[f];postMp3[f]=postMp3[h];postMp3[h]=g;var g=postBaru[f];postBaru[f]=postBaru[h];postBaru[h]=g}for(var b=d;b<c-1;b++){for(var a=b+1;a<c;a++){if(postTitle[b]>postTitle[a]){e(b,a)}}}}function displayToc(a){var l=0;var h="";var e="Judul Artikel";var m="Klik untuk sortir berdasarkan judul";var d="Tanggal";var k="Klik untuk Sortir bedasarkan tanggal";var c="Kategori";var j="";if(sortBy=="titleasc"){m+=" (descending)";k+=" (newest first)"}if(sortBy=="titledesc"){m+=" (ascending)";k+=" (newest first)"}if(sortBy=="dateoldest"){m+=" (ascending)";k+=" (newest first)"}if(sortBy=="datenewest"){m+=" (ascending)";k+=" (oldest first)"}if(postFilter!=""){j="Klik untuk menampilkan semua"}h+="<table>";h+="<tr>";h+='<td class="toc-header-col1">';h+='<a href="javascript:toggleTitleSort();" title="'+m+'">'+e+"</a>";h+="</td>";h+='<td class="toc-header-col2">';h+='<a href="javascript:toggleDateSort();" title="'+k+'">'+d+"</a>";h+="</td>";h+='<td class="toc-header-col3">';h+='<a href="javascript:allPosts();" title="'+j+'">'+c+"</a>";h+="</td>";h+='<td class="toc-header-col4">';h+="Download MP3";h+="</td>";h+="</tr>";for(var g=0;g<postTitle.length;g++){if(a==""){h+='<tr><td class="toc-entry-col1"><a href="'+postUrl[g]+'">'+postTitle[g]+'</a></td><td class="toc-entry-col2">'+postDate[g]+'</td><td class="toc-entry-col3">'+postLabels[g]+'</td><td class="toc-entry-col4"><a href="'+postMp3[g]+'">Download</a></td></tr>';l++}else{z=postLabels[g].lastIndexOf(a);if(z!=-1){h+='<tr><td class="toc-entry-col1"><a href="'+postUrl[g]+'">'+postTitle[g]+'</a></td><td class="toc-entry-col2">'+postDate[g]+'</td><td class="toc-entry-col3">'+postLabels[g]+'</td><td class="toc-entry-col4"><a href="'+postMp3[g]+'">Download</a></td></tr>';l++}}}h+="</table>";if(l==postTitle.length){var f='<span class="toc-note">Menampilkan Semua '+postTitle.length+" Artikel<br/></span>"}else{var f='<span class="toc-note">Menampilkan '+l+" artikel dengan kategori '";f+=postFilter+"' dari "+postTitle.length+" Total Artikel<br/></span>"}var b=document.getElementById("toc");b.innerHTML=f+h}function displayToc2(){var a=0;var b=0;while(b<postTitle.length){temp1=postLabels[b];document.write("<p/>");document.write('<p><a href="/search/label/'+temp1+'">'+temp1+"</a></p><ol>");firsti=a;do{document.write("<li>");document.write('<a href="'+postUrl[a]+'">'+postTitle[a]+"</a>");if(postBaru[a]==true){document.write(' - <strong><em><span style="color: rgb(255, 0, 0);">New !!</span> </em></strong>')}document.write("</li>");a=a+1}while(postLabels[a]==temp1);b=a;document.write("</ol>");sortPosts2(firsti,a);if(b>postTitle.length){break}}}function toggleTitleSort(){if(sortBy=="titleasc"){sortBy="titledesc"}else{sortBy="titleasc"}sortPosts(sortBy);displayToc(postFilter)}function toggleDateSort(){if(sortBy=="datenewest"){sortBy="dateoldest"}else{sortBy="datenewest"}sortPosts(sortBy);displayToc(postFilter)}function showToc(){if(tocLoaded){displayToc(postFilter);var a=document.getElementById("toclink")}else{alert("Just wait... TOC is loading")}}function hideToc(){var a=document.getElementById("toc");a.innerHTML="";var b=document.getElementById("toclink");b.innerHTML='<a href="#" onclick="scroll(0,0); showToc(); Effect.toggle('toc-result','blind');">?? Menampilkan Daftar Isi</a> <img src="http://radiorodja.googlepages.com/new_1.gif"/>'}function looptemp2(){for(var a=0;a<numberfeed;a++){document.write("<br>");document.write('Post Link    : <a href="'+postUrl[a]+'">'+postTitle[a]+"</a><br>");document.write('Download mp3  : <a href="'+postMp3[a]+'">'+postTitle[a]+"</a><br>");document.write("<br>")}};
+var postTitle = new Array(),
+   postUrl = new Array(),
+   postMp3 = new Array(),
+   postDate = new Array(),
+   postLabels = new Array(),
+   postBaru = new Array(),
+   sortBy = 'titleasc',
+   tocLoaded = false,
+   postFilter = '',
+   numberfeed = 0;
+
+function loadtoc(_0xd19fxc) {
+   function _0xd19fxd() {
+      if ('entry' in _0xd19fxc['feed']) {
+         var _0xd19fxe = _0xd19fxc['feed']['entry']['length'];
+         numberfeed = _0xd19fxe;
+         ii = 0;
+         for (var _0xd19fxf = 0; _0xd19fxf < _0xd19fxe; _0xd19fxf++) {
+            var _0xd19fx10 = _0xd19fxc['feed']['entry'][_0xd19fxf];
+            var _0xd19fx11 = _0xd19fx10['title']['$t'];
+            var _0xd19fx12 = _0xd19fx10['published']['$t']['substring'](0, 10);
+            var _0xd19fx13;
+            for (var _0xd19fx14 = 0; _0xd19fx14 < _0xd19fx10['link']['length']; _0xd19fx14++) {
+               if (_0xd19fx10['link'][_0xd19fx14]['rel'] == 'alternate') {
+                  _0xd19fx13 = _0xd19fx10['link'][_0xd19fx14]['href'];
+                  break;
+               };
+            };
+            var _0xd19fx15 = '';
+            for (var _0xd19fx14 = 0; _0xd19fx14 < _0xd19fx10['link']['length']; _0xd19fx14++) {
+               if (_0xd19fx10['link'][_0xd19fx14]['rel'] == 'enclosure') {
+                  _0xd19fx15 = _0xd19fx10['link'][_0xd19fx14]['href'];
+                  break;
+               };
+            };
+            var _0xd19fx16 = '';
+            if ('category' in _0xd19fx10) {
+               for (var _0xd19fx14 = 0; _0xd19fx14 < _0xd19fx10['category']['length']; _0xd19fx14++) {
+                  _0xd19fx16 = _0xd19fx10['category'][_0xd19fx14]['term'];
+                  var _0xd19fx17 = _0xd19fx16['lastIndexOf'](';');
+                  if (_0xd19fx17 != -1) {
+                     _0xd19fx16 = _0xd19fx16['substring'](0, _0xd19fx17);
+                  };
+                  postLabels[ii] = _0xd19fx16;
+                  postTitle[ii] = _0xd19fx11;
+                  postDate[ii] = _0xd19fx12;
+                  postUrl[ii] = _0xd19fx13;
+                  postMp3[ii] = _0xd19fx15;
+                  if (_0xd19fxf < maxNew) {
+                     postBaru[ii] = true;
+                  } else {
+                     postBaru[ii] = false;
+                  };
+                  ii = ii + 1;
+               };
+            };
+         };
+      };
+   };
+   _0xd19fxd();
+   sortBy = 'titleasc';
+   sortPosts(sortBy);
+   sortlabel();
+   tocLoaded = true;
+   displayToc2();
+   document['write']('');
+};
+
+function sortlabel() {
+   sortBy = 'orderlabel';
+   sortPosts(sortBy);
+   var _0xd19fx19 = 0;
+   var _0xd19fxf = 0;
+   while (_0xd19fxf < postTitle['length']) {
+      temp1 = postLabels[_0xd19fxf];
+      firsti = _0xd19fx19;
+      do {
+         _0xd19fx19 = _0xd19fx19 + 1;
+      } while (postLabels[_0xd19fx19] == temp1);;
+      _0xd19fxf = _0xd19fx19;
+      sortPosts2(firsti, _0xd19fx19);
+      if (_0xd19fxf > postTitle['length']) {
+         break;
+      };
+   };
+};
+
+function sortPosts(sortBy) {
+   function _0xd19fx1b(_0xd19fx1c, _0xd19fx1d) {
+      var _0xd19fx1e = postTitle[_0xd19fx1c];
+      postTitle[_0xd19fx1c] = postTitle[_0xd19fx1d];
+      postTitle[_0xd19fx1d] = _0xd19fx1e;
+      var _0xd19fx1e = postDate[_0xd19fx1c];
+      postDate[_0xd19fx1c] = postDate[_0xd19fx1d];
+      postDate[_0xd19fx1d] = _0xd19fx1e;
+      var _0xd19fx1e = postUrl[_0xd19fx1c];
+      postUrl[_0xd19fx1c] = postUrl[_0xd19fx1d];
+      postUrl[_0xd19fx1d] = _0xd19fx1e;
+      var _0xd19fx1e = postLabels[_0xd19fx1c];
+      postLabels[_0xd19fx1c] = postLabels[_0xd19fx1d];
+      postLabels[_0xd19fx1d] = _0xd19fx1e;
+      var _0xd19fx1e = postBaru[_0xd19fx1c];
+      postBaru[_0xd19fx1c] = postBaru[_0xd19fx1d];
+      postBaru[_0xd19fx1d] = _0xd19fx1e;
+   };
+   for (var _0xd19fxf = 0; _0xd19fxf < postTitle['length'] - 1; _0xd19fxf++) {
+      for (var _0xd19fx19 = _0xd19fxf + 1; _0xd19fx19 < postTitle['length']; _0xd19fx19++) {
+         if (sortBy == 'titleasc') {
+            if (postTitle[_0xd19fxf] > postTitle[_0xd19fx19]) {
+               _0xd19fx1b(_0xd19fxf, _0xd19fx19);
+            };
+         };
+         if (sortBy == 'titledesc') {
+            if (postTitle[_0xd19fxf] < postTitle[_0xd19fx19]) {
+               _0xd19fx1b(_0xd19fxf, _0xd19fx19);
+            };
+         };
+         if (sortBy == 'dateoldest') {
+            if (postDate[_0xd19fxf] > postDate[_0xd19fx19]) {
+               _0xd19fx1b(_0xd19fxf, _0xd19fx19);
+            };
+         };
+         if (sortBy == 'datenewest') {
+            if (postDate[_0xd19fxf] < postDate[_0xd19fx19]) {
+               _0xd19fx1b(_0xd19fxf, _0xd19fx19);
+            };
+         };
+         if (sortBy == 'orderlabel') {
+            if (postLabels[_0xd19fxf] > postLabels[_0xd19fx19]) {
+               _0xd19fx1b(_0xd19fxf, _0xd19fx19);
+            };
+         };
+      };
+   };
+};
+
+function sortPosts2(_0xd19fx20, _0xd19fx21) {
+   function _0xd19fx22(_0xd19fx1c, _0xd19fx1d) {
+      var _0xd19fx1e = postTitle[_0xd19fx1c];
+      postTitle[_0xd19fx1c] = postTitle[_0xd19fx1d];
+      postTitle[_0xd19fx1d] = _0xd19fx1e;
+      var _0xd19fx1e = postDate[_0xd19fx1c];
+      postDate[_0xd19fx1c] = postDate[_0xd19fx1d];
+      postDate[_0xd19fx1d] = _0xd19fx1e;
+      var _0xd19fx1e = postUrl[_0xd19fx1c];
+      postUrl[_0xd19fx1c] = postUrl[_0xd19fx1d];
+      postUrl[_0xd19fx1d] = _0xd19fx1e;
+      var _0xd19fx1e = postLabels[_0xd19fx1c];
+      postLabels[_0xd19fx1c] = postLabels[_0xd19fx1d];
+      postLabels[_0xd19fx1d] = _0xd19fx1e;
+      var _0xd19fx1e = postBaru[_0xd19fx1c];
+      postBaru[_0xd19fx1c] = postBaru[_0xd19fx1d];
+      postBaru[_0xd19fx1d] = _0xd19fx1e;
+   };
+   for (var _0xd19fxf = _0xd19fx20; _0xd19fxf < _0xd19fx21 - 1; _0xd19fxf++) {
+      for (var _0xd19fx19 = _0xd19fxf + 1; _0xd19fx19 < _0xd19fx21; _0xd19fx19++) {
+         if (postTitle[_0xd19fxf] > postTitle[_0xd19fx19]) {
+            _0xd19fx22(_0xd19fxf, _0xd19fx19);
+         };
+      };
+   };
+};
+
+function displayToc2() {
+   var _0xd19fx19 = 0;
+   var _0xd19fxf = 0;
+   document['write']('<div id="daftar-isi">');
+   while (_0xd19fxf < postTitle['length']) {
+      temp1 = postLabels[_0xd19fxf];
+      document['write']('<div class="sublabel">');
+      document['write']('<div class="judul-label">' + temp1 + '</div>');
+      document['write']('<div class="judul-list"><ol>');
+      firsti = _0xd19fx19;
+      var _0xd19fx24 = 'odd';
+      do {
+         if (_0xd19fx24 == 'odd') {
+            document['write']('<li class="data-list list-ganjil">');
+            _0xd19fx24 = 'even';
+         } else {
+            document['write']('<li class="data-list list-genap">');
+            _0xd19fx24 = 'odd';
+         };
+         if (openNewTab) {
+            document['write']('<a href="' + postUrl[_0xd19fx19] + '" target="_blank">' + postTitle[_0xd19fx19] + '</a>');
+         } else {
+            document['write']('<a href="' + postUrl[_0xd19fx19] + '">' + postTitle[_0xd19fx19] + '</a>');
+         };
+         if (showNew) {
+            if (postBaru[_0xd19fx19] == true) {
+               document['write'](' - <strong>' + baru + '</strong>');
+            };
+         };
+         document['write']('</li>');
+         _0xd19fx19 = _0xd19fx19 + 1;
+      } while (postLabels[_0xd19fx19] == temp1);;
+      _0xd19fxf = _0xd19fx19;
+      document['write']('</ol></div></div>');
+      sortPosts2(firsti, _0xd19fx19);
+      if (_0xd19fxf > postTitle['length']) {
+         break;
+      };
+   };
+   document['write']('</div><div style="text-align:right;margin-right:7px;"><a style="font:bold 8px Arial,Sans-Serif;color:#666 !important;text-shadow:0px 1px 0px rgba(255,255,255,0.1);opacity:1 !important;visibility:visible !important;display:block !important;" href="http://khazeoblog.blogspot.co.id" target="_blank">Created By Khazeo Blog</a></div>');
+};
+$(function () {
+   if (accToc) {
+      $('#daftar-isi .judul-list')['slideUp']();
+      $('#daftar-isi .judul-label:first')['addClass']('headactive')['next']()['slideDown'](sDownSpeed);
+      $('#daftar-isi .judul-label')['css']('cursor', 'pointer');
+      $('#daftar-isi .judul-label')['click'](function () {
+         if ($(this)['next']()['is'](':hidden')) {
+            $('#daftar-isi .judul-label')['removeClass']('headactive')['next']()['slideUp'](sUpSpeed);
+            $(this)['toggleClass']('headactive')['next']()['slideDown'](sDownSpeed);
+         };
+      });
+   };
+});
